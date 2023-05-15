@@ -1,0 +1,52 @@
+plugins {
+	id 'groovy'
+	id 'org.springframework.boot' version '3.0.6'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id 'com.diffplug.spotless' version '6.15.0'
+}
+
+group = 'net.frey'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'io.projectreactor:reactor-test'
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.jupiter'
+		exclude group: 'org.mockito'
+	}
+
+	testImplementation platform('org.spockframework:spock-bom:2.4-M1-groovy-4.0')
+	testImplementation 'org.spockframework:spock-core'
+	testImplementation 'org.spockframework:spock-spring'
+	testImplementation 'io.projectreactor:reactor-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+spotless {
+	java {
+		removeUnusedImports()
+		palantirJavaFormat()
+	}
+}
+
+compileJava.dependsOn(spotlessApply)

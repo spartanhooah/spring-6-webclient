@@ -1,0 +1,20 @@
+webclient:
+  root-url: http://localhost:8080
+
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          springauth:
+            tokenUri: http://localhost:9000/oauth2/token
+        registration:
+          springauth:
+            clientName: springauth
+            clientId: messaging-client
+            clientSecret: secret
+            scope:
+              - message.read
+              - message.write
+            authorizationGrantType: client_credentials
+            provider: springauth
